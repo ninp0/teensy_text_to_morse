@@ -617,6 +617,10 @@ void loop() {
     
     Serial.print("Transmitted: ");
     Serial.println(message);
+    Serial.println("-----------------------------");
+    Serial.println();
+    Serial.println();
+    Serial.println();    
     
     Serial.flush();
   }
