@@ -13,9 +13,9 @@
 #define txPin 1
 #define ledPin 9
 #define speakerPin 12
-#define morse_freq_hz 1000
+#define morse_freq_hz 600
 // MS = 1200 / WPM
-#define wpm 30
+#define wpm 20
 #define time_unit 1200/wpm 
 
 TeensyView oled(PIN_RESET, PIN_DC, PIN_CS, PIN_SCK, PIN_MOSI);
@@ -82,9 +82,13 @@ void display_morse(String message, int message_len) {
       oled.setCursor(0, 0); // Set cursor to top-left
     }
     
-    Serial.print("Relaying: ");
+
     char msg_byte= message[i];
-    Serial.print(msg_byte);
+
+    if (msg_byte != '\r' || msg_byte != '\n') {
+      Serial.print("Relaying: ");
+      Serial.print(msg_byte);
+    }
 
     switch(msg_byte) {
       case 'A':
@@ -569,6 +573,10 @@ void display_morse(String message, int message_len) {
         
         word_space();
         break;
+      case '\r':
+        break;
+      case '\n':
+        break;
       default:
         Serial.print(" << Invalid Morse Character Detected!");
     }
@@ -599,11 +607,17 @@ void loop() {
   String message = Serial.readString();
   int message_len = message.length();
   if (message_len > 0) {
-    Serial.print("Words/Minute: ");
-    Serial.println(wpm);
-    Serial.print("Message: ");
-    Serial.println(message);
+    Serial.println();
+    Serial.print(morse_freq_hz);
+    Serial.print("HZ @ ");
+    Serial.print(wpm);
+    Serial.println(" WPM");
+    
     display_morse(message, message_len);
+    
+    Serial.print("Transmitted: ");
+    Serial.println(message);
+    
     Serial.flush();
   }
 }
