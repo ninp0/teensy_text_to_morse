@@ -85,10 +85,7 @@ void display_morse(String message, int message_len) {
 
     char msg_byte= message[i];
 
-    if (msg_byte != '\r' || msg_byte != '\n') {
-      Serial.print("Relaying: ");
-      Serial.print(msg_byte);
-    }
+    Serial.print(msg_byte);
 
     switch(msg_byte) {
       case 'A':
